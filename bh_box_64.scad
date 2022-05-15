@@ -25,22 +25,12 @@ module stop() {
     cube([4,4,5],center = true);
 }
 
-
 module box() {union() {
     sides_front_back();
     translate([0,inner/2,box_depth/2-2.5-stop_pos]) stop();
     translate([inner/2,0,box_depth/2-2.5-stop_pos]) stop();
     translate([0,-inner/2,box_depth/2-2.5-stop_pos]) stop();
     translate([-inner/2,0,box_depth/2-2.5-stop_pos]) stop();
-//    translate([outer/2-2-stop_pos,inner/2,-inner/4]) stop();
-//    translate([outer/2-2-stop_pos,-inner/2,inner/4]) stop();
-//    translate([outer/2-2-stop_pos,-inner/2,-inner/4]) stop();
 }}
 
- //  base
-module base(){
-translate([-outer/2 -0+t/2,0,0]) cube([t,inner+t-0.2,inner+t-0.2],center=true);
-}
-//sides();
 box();
-//base();

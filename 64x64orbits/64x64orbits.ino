@@ -44,9 +44,9 @@ uint16_t myRED = dma_display->color565(255, 0, 0);
 uint16_t myGREEN = dma_display->color565(0, 255, 0);
 uint16_t myBLUE = dma_display->color565(0, 0, 255);
 
-uint16_t ball_col_1 = dma_display->color565(40, 150, 100);
-uint16_t ball_col_2 = dma_display->color565(240, 240, 20);
-uint16_t ball_col_3 = dma_display->color565(130, 80, 150);
+uint16_t ball_col_1 = dma_display->color565(245, 155, 66);
+uint16_t ball_col_2 = dma_display->color565(136, 159, 227);
+uint16_t ball_col_3 = dma_display->color565(207, 185, 0);
 
 void setup() {
   // Module  and pin mapping
@@ -97,9 +97,10 @@ void loop() {
         dpx = px[ball]-px[j];
         dpy = py[ball]-py[j];
         rij2 = dpx*dpx + dpy*dpy;
-        if (rij2<0.001) rij2 = 0.001;
+        if (rij2>0.0004) { // only use gravity when they are not too close
         Fx[ball] = Fx[ball] - G*pow(rij2,-1.5)*dpx;
         Fy[ball] = Fy[ball] - G*pow(rij2,-1.5)*dpy;
+        }
       }
     }
     

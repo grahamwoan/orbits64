@@ -23,9 +23,9 @@
 
 #define  N 3 // number of balls
 float n = 6; // soft wall repulsion index
-float G=0.4; // gravity strength
-float dt = 0.00015*N; // timestep
-float v02 = 5.0; // target mean speed squared for balls
+float G = 1.5; // gravity strength
+float dt = 0.0001*N; // timestep
+float v02 = 15.0; // target mean speed squared for balls
 float alpha =1.0e-8; // convergence rate to mean speed
 float loss = 0.7; // loss factor if a fast ball hits a hard wall
 
@@ -38,18 +38,14 @@ int analogPin = 3; // for random number
 //MatrixPanel_I2S_DMA dma_display;
 MatrixPanel_I2S_DMA *dma_display = nullptr;
 
-uint16_t myBLACK = dma_display->color565(0, 0, 0);
-uint16_t myWHITE = dma_display->color565(255, 255, 255);
-uint16_t myRED = dma_display->color565(255, 0, 0);
-uint16_t myGREEN = dma_display->color565(0, 255, 0);
-uint16_t myBLUE = dma_display->color565(0, 0, 255);
-
+uint16_t BLACK = dma_display->color565(0, 0, 0);
+uint16_t RED = dma_display->color565(255, 0, 0);
 uint16_t ball_col_1 = dma_display->color565(245, 155, 66);
 uint16_t ball_col_2 = dma_display->color565(136, 159, 227);
 uint16_t ball_col_3 = dma_display->color565(207, 185, 0);
 
 void setup() {
-  // Module  and pin mapping
+  // pin mapping
   HUB75_I2S_CFG::i2s_pins _pins={R1_PIN, G1_PIN, B1_PIN, R2_PIN, G2_PIN, B2_PIN, A_PIN, B_PIN, C_PIN, D_PIN, E_PIN, LAT_PIN, OE_PIN, CLK_PIN};
   HUB75_I2S_CFG mxconfig(64,64,1, _pins);
 
@@ -69,7 +65,7 @@ void setup() {
     py[ball] = random(100,900)/1000.0;
     vx[ball] = random(-400,400)/100.0;
     vy[ball] = random(-400,400)/100.0;
-    col[ball] = myRED;
+    col[ball] = RED;
   }
 
   col[0] = ball_col_1;
@@ -77,9 +73,8 @@ void setup() {
   col[2] = ball_col_3;
 }
 
-float regulate(float v) {
+float regulate(float v) {   // regulate the speeds to a mean speed squared value
   double r,r1,r2;
-  // regulate the speeds to a mean speed squared value
   r = 1.0 - alpha*pow(v*v-v02,3);
   r1 = max(r,0.9);
   r2 = min(r1,1.1);
@@ -87,8 +82,7 @@ float regulate(float v) {
 }
 
 void loop() {
-  for (int ball = 0; ball < N; ball++) {
-    // soft wall potential
+  for (int ball = 0; ball < N; ball++) {     // soft wall potential
     Fx[ball] = 0.0001*( pow(0.1+px[ball],-n) - pow(1.1-px[ball],-n) );
     Fy[ball] = 0.0001*( pow(0.1+py[ball],-n) - pow(1.1-py[ball],-n) );
 
@@ -117,12 +111,12 @@ void loop() {
     if ( py[ball]<=0.0) {vy[ball] = -loss*vy[ball]; py[ball] = 0.0;}
   }
 
-// display the balls
+  // display the balls
   for (int ball = 0; ball < N; ball++) {
   posx[ball] = floor((1.0-px[ball])*64);
   posy[ball] = floor((1.0-py[ball])*64);
   dma_display->drawPixel(posy[ball],posx[ball],col[ball]);
-  if (posx[ball] != oposx[ball] || posy[ball] != oposy[ball])  dma_display->drawPixel(oposy[ball],oposx[ball],myBLACK);
+  if (posx[ball] != oposx[ball] || posy[ball] != oposy[ball])  dma_display->drawPixel(oposy[ball],oposx[ball],BLACK);
   oposx[ball] = posx[ball];
   oposy[ball] = posy[ball];
   }

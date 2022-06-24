@@ -8,3 +8,5 @@ To get the full effect you need to place a diffusing screen about 2cm in front o
 There is no need for a precision differential equation solver here as orbits don't last long before a body hits a wall, so they are simple fixed Euler steps.  The walls are hard, but have a power-law repulsion force to push slower bodies towards the centre.  Faster bodies that hit the walls experience a loss of energy when they bounce off, to tame them a little.  Overall stability is enforced by 1) turning gravity off when bodies get too close and 2) boosting/slowing bodies slighly over time so their mean kinetic energies are constant.  The ESP32 does not struggle to do these computation in real time  and large numbers of bodies are quite possible.  However, keep an eye on current consumption -- these displays can draw several amps of all the LEDs are tunred on simultaneously. 
 
 There is a simple 3D-printable frame to keep the screen the right distance fro the LEDs and a short movie to give some idea of what it looks like in practice.
+
+test
